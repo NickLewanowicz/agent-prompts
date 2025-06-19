@@ -18,7 +18,3 @@ A curated collection of agent prompts and automation flows designed to enhance p
 ## 📝 Contributing
 
 Feel free to contribute your own prompts and flows that have proven effective for productivity enhancement.
-
-## 📄 License
-
-This repository is open source and available under the [MIT License](LICENSE).
