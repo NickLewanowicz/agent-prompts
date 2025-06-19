@@ -1,7 +1,6 @@
 # Code Review Prompt
 
 ## Purpose
-
 Generate comprehensive code reviews focusing on best practices, potential issues, and improvement suggestions.
 
 ## Prompt Template
@@ -17,9 +16,7 @@ Please review the following code and provide feedback on:
 
 **Code to Review:**
 ```
-
 [INSERT CODE HERE]
-
 ```
 
 **Additional Context:**
@@ -38,5 +35,4 @@ Please provide specific, actionable feedback with examples where possible.
 - Learning and mentorship
 
 ## Tags
-
 `code-review` `quality-assurance` `best-practices`

@@ -1,13 +1,11 @@
 # Content Creation Workflow
 
 ## Overview
-
 A multi-step flow for creating high-quality content from ideation to publication.
 
 ## Workflow Steps
 
 ### Step 1: Topic Research & Ideation
-
 ```
 Research trending topics in [DOMAIN] and generate 10 content ideas that:
 1. Address common pain points for [TARGET AUDIENCE]
@@ -23,7 +21,6 @@ For each idea, provide:
 ```
 
 ### Step 2: Content Outline Creation
-
 ```
 Create a detailed outline for: [SELECTED TOPIC]
 
@@ -39,7 +36,6 @@ Tone: [PROFESSIONAL/CASUAL/EDUCATIONAL]
 ```
 
 ### Step 3: Content Writing
-
 ```
 Write the full content based on the approved outline. Ensure:
 - Clear, engaging introduction
@@ -51,7 +47,6 @@ Write the full content based on the approved outline. Ensure:
 ```
 
 ### Step 4: Review & Polish
-
 ```
 Review and improve the content for:
 - Grammar and spelling
@@ -63,12 +58,10 @@ Review and improve the content for:
 ```
 
 ## Usage Examples
-
 - Blog post creation
 - Social media content
 - Newsletter writing
 - Documentation
 
 ## Tags
-
 `content-creation` `workflow` `writing` `seo`

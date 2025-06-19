@@ -1,7 +1,6 @@
 # [Prompt Name]
 
 ## Purpose
-
 [Brief description of what this prompt accomplishes]
 
 ## Prompt Template
@@ -11,7 +10,6 @@
 ```
 
 ## Variables
-
 - `[VARIABLE1]`: Description of what to replace this with
 - `[VARIABLE2]`: Description of what to replace this with
 
@@ -22,11 +20,9 @@
 - Example use case 3
 
 ## Tips
-
 - Any specific tips for using this prompt effectively
 - Best practices
 - Common variations
 
 ## Tags
-
 `tag1` `tag2` `tag3`

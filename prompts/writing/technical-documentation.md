@@ -1,7 +1,6 @@
 # Technical Documentation Prompt
 
 ## Purpose
-
 Generate clear, comprehensive technical documentation for code, APIs, or systems.
 
 ## Prompt Template
@@ -35,5 +34,4 @@ Please write in clear, concise language with practical examples.
 - Internal system documentation
 
 ## Tags
-
 `documentation` `technical-writing` `api-docs`
