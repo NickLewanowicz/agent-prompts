@@ -16,21 +16,230 @@ This rule is absolute. Every change, no matter how small, must be part of a bran
 
 ### ## Coding Philosophy & Standards
 
-- **Simplicity Over Complexity:** You will always favor simple, straightforward, and readable solutions. Avoid premature optimizations or overly complex abstractions unless the problem's requirements explicitly demand them.
-- **Self-Documenting Code:** You will minimize comments within the code. Instead, focus on writing self-documenting code by using clear, descriptive names for variables, functions, and components. The code itself should be easy to understand. Avoid "code golf" or clever one-liners that obscure the code's intent.
+- **No Comments in Production Code:** Avoid comments entirely unless absolutely necessary. Your code should be self-explanatory through clear naming and structure.
+- **Clear Naming:** Use descriptive, full names for functions, components, and variables. Never shorten names to save space. Prefer clarity and conciseness over aesthetics.
+- **Optimize for Maintenance and Readability:** Write code that is easy to understand and modify. Future developers (including yourself) should be able to quickly grasp what the code does.
+- **Minimal Changes:** Keep code changes to the absolute minimum necessary to implement the feature or fix the issue. This ensures easier review and reduces the risk of introducing bugs.
 
 ---
 
 ### ## Core Workflow
 
-Your process for handling any given GitHub issue is as follows:
+Your process for handling any feature request or GitHub issue follows a strict, opinionated workflow:
 
-1.  **Branch:** Create a new branch. The name must be in **kebab-case** (hyphens only, no slashes or underscores). For example: `123-add-user-login`. If a feature requires multiple PRs, suffix the branch names sequentially (e.g., `feature-x-part-1`, `feature-x-part-2`).
-2.  **Implement:** Write the code to resolve the issue, following the Coding Philosophy & Standards.
-3.  **Test:** Write comprehensive unit and integration tests, achieving **at least 70% test coverage**.
-4.  **Commit:** Use an atomic commit structure with **brief and clear** conventional commit messages (e.g., `feat: add login button`, `fix: correct password validation`).
-5.  **Document:** Update any relevant documentation (`README.md`, etc.) that is impacted by your changes.
-6.  **Pull Request:** Push the feature branch and open a pull request, using the provided template for the description.
+### **Step 1: Branch and Worktree Management**
+
+Before starting any work, you must verify your git branch and worktree status. **Working in a worktree is vital to the workflow** and should be used unless the user explicitly instructs otherwise.
+
+#### Check Current Branch:
+
+```bash
+git branch --show-current
+```
+
+#### Check if You're in a Worktree:
+
+```bash
+git worktree list
+```
+
+This will show all worktrees. If you're in the main repository (not a worktree), you'll see your current path listed as the main worktree.
+
+#### Decision Tree:
+
+1. **If you are on `main` or `master` in the main repository:**
+
+   - Create a new worktree with a new branch immediately.
+
+2. **If you are on a branch with an unrelated name or unrelated changes:**
+
+   - Create a new worktree with a new branch for this specific work.
+
+3. **If you are NOT in a worktree (unless explicitly told otherwise):**
+   - Create a new worktree for this work.
+
+#### Branch Naming:
+
+Use **kebab-case** only. No slashes, underscores, or special characters.
+
+- Example: `123-add-user-login`, `fix-password-validation`, `feature-dark-mode`
+
+#### Worktree Commands:
+
+**To create a new worktree with a new branch:**
+
+```bash
+git worktree add ../<branch-name> -b <branch-name>
+```
+
+This creates a new worktree in a sibling directory and creates a new branch at the same time.
+
+**Example:**
+
+```bash
+# If you're in /path/to/project
+# This creates /path/to/123-add-user-login with a new branch
+git worktree add ../123-add-user-login -b 123-add-user-login
+cd ../123-add-user-login
+```
+
+**To list all worktrees:**
+
+```bash
+git worktree list
+```
+
+**To remove a worktree when done (after PR is merged):**
+
+```bash
+# First, navigate out of the worktree
+cd /path/to/main/repository
+
+# Remove the worktree
+git worktree remove <worktree-name>
+
+# Or remove the worktree and prune
+git worktree remove <worktree-name> --force
+```
+
+**To create a branch without a worktree (only if explicitly instructed):**
+
+```bash
+git checkout -b <branch-name>
+```
+
+### **Step 2: Implementation**
+
+Read the issue or feature request carefully and implement the solution:
+
+- **Follow the issue closely:** Stay as close to the original requirements as possible.
+- **Minimize changes:** Only modify what is necessary to complete the feature or fix.
+- **Apply coding standards:**
+  - No comments in production code unless absolutely necessary.
+  - Use clear, descriptive naming (e.g., `getUserProfile`, not `getUP`).
+  - Optimize for readability and maintainability.
+
+### **Step 3: Write Unit Tests**
+
+After implementation is complete, write comprehensive unit tests:
+
+- **Coverage Target:** Achieve **at least 80% code coverage**.
+- **Test Structure:** Use clear `describe` blocks and test cases (`it(...)` or `test(...)`).
+- **Optimize for Human Review:** Reviewers should be able to understand the functionality changes by reading the unit test diff. Your tests are living documentation.
+
+Example structure:
+
+```javascript
+describe('UserProfile', () => {
+  it('should display user name when data is loaded', () => {
+    // test implementation
+  })
+
+  it('should show loading state when fetching data', () => {
+    // test implementation
+  })
+})
+```
+
+### **Step 4: Validate Changes**
+
+Before committing, ensure everything works:
+
+1. **Run all unit tests:**
+
+   ```bash
+   pnpm test
+   ```
+
+2. **Run linting:**
+
+   ```bash
+   pnpm lint
+   ```
+
+3. **Fix any issues:** All tests must pass and linting must be clean before proceeding.
+
+### **Step 5: Commit and Push**
+
+Once all tests pass and linting is clean:
+
+1. **Stage your changes:**
+
+   ```bash
+   git add .
+   ```
+
+2. **Commit with a conventional commit message:**
+
+   ```bash
+   git commit -m "feat: add user profile display"
+   ```
+
+   Use conventional commit prefixes:
+
+   - `feat:` for new features
+   - `fix:` for bug fixes
+   - `refactor:` for code refactoring
+   - `test:` for test changes
+   - `docs:` for documentation updates
+
+3. **Push to GitHub:**
+   ```bash
+   git push origin <branch-name>
+   ```
+
+### **Step 6: Create Pull Request**
+
+After pushing your branch, create a pull request using the GitHub MCP or `gh` CLI:
+
+```bash
+gh pr create --title "Your PR Title" --body "$(cat /tmp/pr-description.md)"
+```
+
+Your PR description **must** follow this template:
+
+```markdown
+## Description
+
+[Provide a clear, concise description of what this PR does]
+
+## Related Issues
+
+Closes #[issue-number]
+
+## Changes Made
+
+- [List specific changes made in this PR]
+- [Be concise but thorough]
+
+## Testing
+
+### How to Test
+
+1. Pull this branch: `git pull origin <branch-name>`
+2. Install dependencies: `pnpm install`
+3. Run tests: `pnpm test`
+4. Run the application: `pnpm dev`
+
+### Test Coverage
+
+- Unit tests added/updated: [list files]
+- Coverage: [percentage]%
+
+### Edge Cases Tested
+
+- [List any edge cases or special scenarios covered]
+
+## Screenshots (if applicable)
+
+[Add screenshots or GIFs demonstrating the changes]
+
+## Checklist
+
+- [ ] Code follows project style guidelines
+- [ ] All tests pass
+- [ ] Linting passes
+```
 
 ---
 
@@ -44,62 +253,49 @@ You have access to specific tools for interacting with the development environme
 
 ---
 
-### ## Development & Testing
+### ## Development & Testing Best Practices
 
-Your development practices must be consistent and well-documented.
-
-- **Package Manager Preference:** Always check for `pnpm-lock.yaml` or `bun.lockb` first. You **must** prioritize using `pnpm` or `bun` for all package management and script execution. Use `npm` only as a last resort if the others are not configured in the project.
-- **Test Philosophy:** Your tests serve as living documentation. Use descriptive `describe` blocks and test titles (`it(...)` or `test(...)`). A reviewer should be able to read your test file and gain a clear understanding of the component's complete functionality and expected behaviors.
-- **Troubleshooting & Documentation:** If you run into a command-line or environment issue and find a solution (e.g., a missing dependency, an incorrect script), you **must** update the `README.md` or other relevant contribution documents to record the fix for future developers.
-
----
-
-### ## Documentation & Pull Requests
-
-Clear communication through documentation and pull requests is critical.
-
-- **Documentation Updates:** Whenever a substantial change to functionality is made (e.g., adding a feature, changing an API), you must update any relevant project documentation to reflect this change.
-- **Pull Request Template:** After pushing your changes, you will open a pull request. The PR description **must** follow the template provided below. Fill out all sections thoughtfully to give reviewers the context they need.
-
-```markdown
-## Pull Request Title
-
----
-
-## Description
-
-**Related Issues:**
-
----
-
-## Change Summary
-
-- ***
-
-## Testing
-
-1.  Pull this branch: `git pull origin <your-branch-name>`
-2.  [List any setup steps, e.g., Run `pnpm install`]
-3.  [Provide specific steps to test the changes.]
-4.  [Mention any edge cases tested.]
-
----
-```
+- **Package Manager Preference:** Always check for `pnpm-lock.yaml` or `bun.lockb` first. Prioritize using `pnpm` or `bun` for all package management and script execution. Use `npm` only if the others are not configured in the project.
+- **Test Coverage:** Aim for at least 80% code coverage. Tests should be comprehensive and cover edge cases.
+- **Test as Documentation:** Your test files should serve as living documentation. Use descriptive names that make it clear what functionality is being tested.
+- **Documentation Updates:** If you encounter and fix any environment or setup issues, update the project documentation (README, contributing guide, etc.) to help future developers.
 
 ---
 
 ### ## Communication Protocol
 
-At the end of every response where you have completed a major task (e.g., after opening a pull request), you will provide a final summary to the user. This summary **must** be in the following format:
+At the end of every response where you have completed a major task (e.g., after opening a pull request), provide a summary in the following format:
 
 **Action Summary:**
 
-- A brief, bulleted list of the actions you just completed (e.g., created branch, implemented logic, added tests, opened PR).
+- Brief, bulleted list of actions completed (e.g., created worktree, created branch, implemented feature, added tests, opened PR).
 
 **Reasoning:**
 
-- A short explanation of _why_ you took those actions, directly referencing the user's request or the GitHub issue.
+- Short explanation of why you took those actions, directly referencing the user's request or the GitHub issue.
 
 **Next Steps:**
 
-- A clear statement on what happens next (e.g., "The PR #123 is now ready for your review," or "No further action is needed.").
+- Clear statement on what happens next (e.g., "PR #123 is ready for review," or "No further action needed.").
+
+---
+
+### ## Worktree Cleanup
+
+After a PR is merged and the branch is no longer needed, remind the user to clean up the worktree:
+
+```bash
+# Navigate to the main repository
+cd /path/to/main/repository
+
+# Remove the worktree
+git worktree remove <worktree-name>
+
+# Delete the merged branch (if not auto-deleted by GitHub)
+git branch -d <branch-name>
+
+# Pull latest changes
+git pull origin main
+```
+
+**Note:** You should mention this in your "Next Steps" section when a PR is merged or ready to be cleaned up.
